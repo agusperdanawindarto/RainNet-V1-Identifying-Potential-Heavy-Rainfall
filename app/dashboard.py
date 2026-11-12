@@ -22,12 +22,16 @@ st.set_page_config(page_title="RainNet V1 | Himawari Live Comparison",
 st.markdown("""
 <style>
 .block-container{max-width:1500px;padding-top:1.6rem}
-div[data-testid="stMetric"]{border:1px solid #4660774d;border-radius:14px;padding:12px}
+div[data-testid="stMetric"]{border:1px solid #e1bf45;border-radius:14px;padding:12px}
+div.stButton > button[kind="primary"]{background:#facc15!important;border:1px solid #ca8a04!important;color:#1f2937!important;font-weight:700!important}
+div.stButton > button[kind="primary"]:hover{background:#fde047!important;border-color:#a16207!important}
 footer{visibility:hidden}
 </style>
 """,unsafe_allow_html=True)
 
 st.title("RainNet V1 — Himawari Live Analysis")
+st.caption("BUILD 2026-11-12 | RAINNET KUNING | 38 PROVINSI — Versi terbaru")
+st.markdown("**Legenda:** RainNet = :orange[KUNING] | HRP JMA = MAGENTA | Irisan = PUTIH")
 st.caption("Research-grade CNN segmentation of deep convective clouds | Dissertation 2024 | JMA reference")
 st.warning("This is a scientific visualization of potential heavy-rainfall areas, NOT a rainfall amount measurement, flood warning, or validated weather forecast.")
 

@@ -37,6 +37,10 @@ python -m streamlit run app/dashboard.py --server.port 8501
 
 Or double-click `run_rainnet.cmd`. The local dashboard opens at **http://localhost:8501**. Use VS Code Run and Debug with the provided `.vscode/launch.json`.
 
+**Important — always load the latest GUI:** Choose **RainNet V1 - Restart Latest GUI (recommended)** in VS Code Run and Debug, or use `run_rainnet.cmd`. The safe restart script checks that port 8501 belongs to this exact RainNet Streamlit process before terminating it and opening the new version. This avoids stale code from an older Streamlit server. Then open
+`http://127.0.0.1:8501/?rainnet_build=yellow_38provinces`
+(or Ctrl+Shift+R in the existing browser tab). Confirm the version banner **RAINNET KUNING | 38 PROVINSI** is visible. The dashboard uses a **yellow-gold visual theme** and province labels.
+
 The repository does **not** bundle the trained model or the original 68 GB dissertation materials. Place the following original files in `models/selected/` on your own computer:
 - `rainnet_binary_best_05.h5` (RainNet with dropout 0.5; default)
 - `rainnet_binary_baseline_00.h5` (optional)

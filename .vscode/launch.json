@@ -1,14 +1,31 @@
 {
- "version": "0.2.0",
- "configurations": [
-  {
-   "name": "RainNet V1 - JMA Live GUI",
-   "type": "python",
-   "request": "launch",
-   "module": "streamlit",
-   "args": ["run", "${workspaceFolder}/app/dashboard.py", "--server.port", "8501", "--server.address", "127.0.0.1", "--server.headless", "false"],
-   "console": "integratedTerminal",
-   "justMyCode": false
-  }
- ]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "RainNet V1 - Restart Latest GUI (recommended)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/restart_dashboard.py",
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "RainNet V1 - Debug Streamlit Directly",
+      "type": "python",
+      "request": "launch",
+      "module": "streamlit",
+      "args": [
+        "run",
+        "${workspaceFolder}/app/dashboard.py",
+        "--server.port",
+        "8501",
+        "--server.address",
+        "127.0.0.1",
+        "--server.headless",
+        "false"
+      ],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ]
 }
