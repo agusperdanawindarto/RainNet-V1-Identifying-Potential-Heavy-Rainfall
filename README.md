@@ -4,6 +4,22 @@
 
 Research project associated with the 2024 doctoral dissertation of Agus Perdana Windarto, *Pengembangan Model Convolutional Neural Network untuk Segmentasi Awan Konvektif dalam Mengidentifikasi Potensi Hujan Deras.*
 
+## Published research output (2024)
+
+The original doctoral research underlying RainNet has been **published in a peer-reviewed scientific journal**:
+
+> **A Novel Convective Cloud Segmentation for Heavy Rainfall Potential Assessment Using Deep Learning**  
+> **Authors:** Agus Perdana Windarto, Y. Yuhandri, and Saiful Bukhori  
+> **Journal:** *ICIC Express Letters*  
+> **Volume / Issue:** 18(4), 2024  
+> **Pages:** 313–323  
+> **DOI:** [10.24507/icicel.18.04.313](https://doi.org/10.24507/icicel.18.04.313)  
+> **Full text:** [Read the published article (PDF)](http://www.icicel.org/ell/contents/2024/4/el-18-04-01.pdf)
+
+**Suggested citation:** Windarto, A. P., Yuhandri, Y., & Bukhori, S. (2024). A novel convective cloud segmentation for heavy rainfall potential assessment using deep learning. *ICIC Express Letters, 18*(4), 313–323. https://doi.org/10.24507/icicel.18.04.313
+
+**Research relationship:** This publication reports the original deep-learning convective-cloud segmentation research. The **2026 RainNet V1 multi-agent dashboard**, live JMA visual comparison and province-level visualization are subsequent software developments; they should not be interpreted as already having been evaluated or published in the 2024 article.
+
 ## What this repository provides
 
 A **VS Code / Streamlit multi-agent desktop-local research dashboard** that retrieves synchronized Himawari **B13 Infrared** and **Heavy Rainfall Potential (HRP)** images from Japan Meteorological Agency (JMA) and applies the original trained **RainNet** model. The system compares its segmentation visually with JMA's HRP product, produces an annotated deep blue RainNet overlay, and reports indicative cloud coverage for **38 Indonesian provinces** with geographic labels, exportable CSV, and a saved JSON audit report.
