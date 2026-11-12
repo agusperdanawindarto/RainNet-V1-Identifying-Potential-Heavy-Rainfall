@@ -10,6 +10,46 @@ A **VS Code / Streamlit multi-agent desktop-local research dashboard** that retr
 
 **Not a rainfall gauge or an operational warning system.** HRP indicates possible or probable rainfall associated with deep convective clouds, not measured rainfall in millimeters. Derived-mask similarity is exploratory agreement with JMA imagery, not independent ground-truth validation or a forecast of future rainfall.
 
+## Experimental results — original RainNet research
+
+The following figures are taken from the **archived dissertation experiments** rather than newly fabricated examples. Each dated figure preserves its original labels, colours, and per-scene DSC values. RainNet was compared with **U-Net** and a reference mask derived from JMA imagery.
+
+### 1. Historical segmentation: 20 September 2023, 14:00 UTC
+
+![RainNet versus U-Net segmentation at 14:00 UTC: DSC 0.8564 versus 0.8104](docs/figures/2023_1400_rai_unet_reference.png)
+
+*Figure 1. Original dissertation output at 14:00 UTC. RainNet DSC **0.8564**, U-Net DSC **0.8104**, and the reference annotation. Original figure colours (yellow / cyan / magenta) are preserved.*
+
+![Ground-truth mask, RainNet and U-Net segmentation, and error visualization at 14:00 UTC](docs/figures/2023_1400_groundtruth_masks.png)
+
+*Figure 2. The corresponding original binary masks and difference plots. The target is a JMA-derived reference mask, not observed surface precipitation.*
+
+### 2. Historical segmentation: 20 September 2023, 15:00 UTC
+
+![RainNet versus U-Net segmentation at 15:00 UTC: DSC 0.8676 versus 0.8153](docs/figures/2023_1500_rai_unet_reference.png)
+
+*Figure 3. Archived scene at 15:00 UTC. RainNet DSC **0.8676** versus U-Net DSC **0.8153** on this scene.*
+
+[View the corresponding 15:00 UTC binary masks and error plots](docs/figures/2023_1500_groundtruth_masks.png).
+
+### 3. Training history and checkpoint validation
+
+![Original 1000-epoch RainNet training and validation Dice and loss curves](docs/figures/training_history_dropout05.png)
+
+*Figure 4. Plots regenerated from the original NumPy training-history file (Dataset 4, dropout 0.5, 1,000 epochs), **without retraining**.*
+
+![Retrospective five-checkpoint RainNet validation with dropout rates 0.1 to 0.9](docs/figures/validation_dropout_comparison.png)
+
+*Figure 5. Retrospective evaluation of five historical checkpoints on **118 archived validation images**, with a binary-pixel threshold of 0.5. Dropout 0.5 reached mean DSC **0.816416** and IoU **0.703124**. Its margin over dropout 0.1 is small and is not statistically established. See [model validation methods](docs/MODEL_VALIDATION.md).*
+
+### 4. Multi-agent RainNet V1 research prototype (November 2026)
+
+![RainNet deep-blue segmented cloud regions with 38-province geographic labels](docs/figures/prototype_2026_blue_province_overlay.jpg)
+
+*Figure 6. Example output from the 2026 JMA Himawari monitoring prototype. Deep blue represents RainNet segmentation, lighter blue denotes agreement with visual JMA HRP, and the labels summarize province-level scene coverage. This is a **static research illustration**, not a live GitHub feed, a future-rainfall forecast or an official warning.*
+
+**Source and scientific limitations:** Original experimental figures are copied from the local dissertation folders `legacy/NEW_PROJECT/Hasil PRediksi/` and `legacy/NEW_PROJECT/Hasil GroundTruth/`. Training plots come from archived `saved-model-and-history` NumPy files; the dropout comparison is derived from `reports/validation_model_selection.json`. Source imagery and reference masks are associated with **Japan Meteorological Agency (JMA) Himawari** products. These comparisons are **not independent observations of rainfall amounts**.
+
 ### Multi-agent architecture
 
 1. **Acquisition Agent** — downloads matching B13 and HRP product images (same region and time asset key).
