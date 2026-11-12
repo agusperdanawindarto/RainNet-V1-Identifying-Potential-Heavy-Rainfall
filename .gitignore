@@ -5,6 +5,7 @@ models/selected/
 models/model_manifest.json
 outputs/
 logs/
+reports/*.json
 archive/
 *.h5
 *.hdf5

@@ -43,7 +43,11 @@ The repository does **not** bundle the trained model or the original 68 GB disse
 - `rainnet_multiclass.h5` (research archive, not used by binary UI)
 - `unet_multiclass.h5` (research archive, not used by binary UI)
 
-The original 2024 RainNet architecture source modules are provided under `app/architectures/` for code reproducibility. If the full local historical archive exists, it is preferred. Model loading is version-dependent: the tested environment was TensorFlow 2.13.0 on Python 3.8.10.
+The original 2024 RainNet architecture source modules are provided under `app/architectures/` for code reproducibility. If the full local historical archive exists, it is preferred.
+
+**Model-selection audit:** five archived dropout checkpoints were compared using the complete 118-image Dataset 4 validation set with normalized 0–1 B13 inputs. The highest observed mean validation DSC was **0.816416** for **dropout 0.5** (mean IoU **0.703124**); the difference from dropout 0.1 is small and not statistically established. See [checkpoint audit](docs/MODEL_VALIDATION.md).
+
+Model loading is version-dependent: the tested environment was TensorFlow 2.13.0 on Python 3.8.10.
 
 `scripts/select_and_hash_models.py` can copy and verify the selected weights **from the original dissertation folder**, if you have that folder. `scripts/consolidate_legacy_experiments.py` performs a copy-and-verify archive; it does not delete originals.
 

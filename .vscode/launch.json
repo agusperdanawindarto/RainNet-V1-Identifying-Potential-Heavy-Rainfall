@@ -6,7 +6,7 @@
    "type": "python",
    "request": "launch",
    "module": "streamlit",
-   "args": ["run", "${workspaceFolder}/app/dashboard.py", "--server.port", "8501", "--server.headless", "false"],
+   "args": ["run", "${workspaceFolder}/app/dashboard.py", "--server.port", "8501", "--server.address", "127.0.0.1", "--server.headless", "false"],
    "console": "integratedTerminal",
    "justMyCode": false
   }
