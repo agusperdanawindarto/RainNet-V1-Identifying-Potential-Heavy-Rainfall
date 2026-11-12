@@ -9,6 +9,7 @@ from PIL import Image
 from .jma import AcquisitionAgent, JMAFrame
 from .model import load_model, predict_image, ROOT
 from .comparison import compare, visualization
+from .provinces import GRID_SIZE, analyze_provinces, draw_province_labels
 
 
 class QualityAgent:
@@ -31,7 +32,8 @@ class ReportingAgent:
         self.root=Path(root)
 
     def save(self, record: dict, b13: Image.Image, hrp: Image.Image,
-             overlay: Image.Image | None):
+             overlay: Image.Image | None,
+             province_overlay: Image.Image | None = None):
         directory=self.root/"outputs"/"runs"/record["frame"]["fetched_utc"][:10]
         directory.mkdir(parents=True, exist_ok=True)
         token=record["frame"]["time_token"]
@@ -40,6 +42,8 @@ class ReportingAgent:
         (directory/(run+"_report.json")).write_text(json.dumps(record,indent=2,ensure_ascii=False),encoding="utf-8")
         if overlay is not None:
             overlay.save(directory/(run+"_RainNet-vs-JMA.png"))
+        if province_overlay is not None:
+            province_overlay.save(directory/(run+"_RainNet_Provinces_Labeled.png"))
         return directory/(run+"_report.json")
 
 
@@ -67,15 +71,35 @@ class MultiAgentOrchestrator:
         audit.append({"agent":"JMA Reference Comparison","result":"OK",
                       "type":"screen-space agreement; not rainfall amount"})
         blend=visualization(b13,prob,hrp,threshold=threshold)
+        province_summary=[]
+        province_overlay=None
+        province_status="Unavailable: native 1501x901 JMA r2w grid required."
+        if b13.size == GRID_SIZE:
+            province_summary=analyze_provinces(prob,hrp,threshold=threshold)
+            province_overlay=draw_province_labels(blend,province_summary)
+            province_status="OK: 38 provinces, JMA 0.05-degree grid; approximate geographic attribution."
+        audit.append({"agent":"Province Attribution","result":province_status,
+                      "province_count":len(province_summary)})
         record={
             "frame":{k:(str(v) if isinstance(v,Path) else v) for k,v in asdict(frame).items()},
             "model":model_name,"metrics":statistics,"agents":audit,
+            "province_summary":province_summary,
+            "province_method":{
+                "status":province_status,
+                "basis":"JMA r2w 1501x901 at 0.05-degree grid, 90-165 E / 30 N-15 S",
+                "geometry":"38 Indonesian province polygons, CC BY 4.0, see app/assets/province_source.json",
+                "indicator":"percentage of rasterized province pixels classified as rain-potential cloud",
+                "limits":"Current-image indicative coverage, NOT future rainfall prediction, probability of rain, mm/h, or official weather warning."},
             "provenance":{"JMA_page":"https://www.data.jma.go.jp/mscweb/data/himawari/sat_hrp.php?area=r2s",
                           "model_source":"Agus Perdana Windarto, dissertation RainNet, 2024",
                           "data_source":"JMA Himawari; synchronized B13 and HRP render via identical area and asset key"},
             "use_limit":"Research visualization only, not a public warning or weather forecast."
         }
-        report=self.reporting.save(record,b13,hrp,blend)
+        report=self.reporting.save(record,b13,hrp,blend,province_overlay)
         audit.append({"agent":"Reporting","result":"OK","report":str(report)})
+        # Save the final audit as JSON; otherwise the disk report omits the
+        # final Reporting agent appended after the initial save().
+        report.write_text(json.dumps(record,indent=2,ensure_ascii=False),encoding="utf-8")
         return {"frame":frame,"b13":b13,"hrp":hrp,"overlay":blend,
+                "province_overlay":province_overlay,"province_summary":province_summary,
                 "record":record,"report_path":report}

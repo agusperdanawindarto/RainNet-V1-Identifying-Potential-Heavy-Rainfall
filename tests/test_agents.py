@@ -92,5 +92,7 @@ class AgentTests(TestCase):
             result=job.run(model=FakeModel(),threshold=.5)
             self.assertTrue(result["report_path"].exists())
             self.assertEqual(result["record"]["model"],"RainNet (dropout 0.5)")
-            self.assertEqual(len(result["record"]["agents"]),5)
+            self.assertEqual(len(result["record"]["agents"]),6)
+            self.assertEqual(len(__import__("json").loads(
+                result["report_path"].read_text(encoding="utf-8"))["agents"]),6)
 if __name__=="__main__":main()

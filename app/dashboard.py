@@ -4,6 +4,8 @@ Run: python -m streamlit run app/dashboard.py --server.port 8501
 """
 from __future__ import annotations
 import json
+import csv
+import io
 from pathlib import Path
 import sys
 import streamlit as st
@@ -39,8 +41,10 @@ with st.sidebar:
     st.write("Mode: model asli, inference tanpa training")
     st.markdown("[JMA Heavy Rainfall Potential (r2s)](https://www.data.jma.go.jp/mscweb/data/himawari/sat_hrp.php?area=r2s)")
     st.markdown("[JMA Users' Guide](https://www.data.jma.go.jp/mscweb/data/himawari/Users_Guide.pdf)")
+    st.markdown("[Data batas 38 provinsi · CC BY 4.0](https://github.com/denyherianto/indonesia-geojson-topojson-maps-with-38-provinces)")
     st.divider()
-    st.info("Warna sian = hasil RainNet. Area putih pada citra gabungan = tumpang-tindih dengan tanda magenta JMA.")
+    st.info("Kuning = segmentasi model terpilih, magenta = indikator HRP JMA, putih = area tumpang tindih. "
+            "Label provinsi menyatakan cakupan piksel terindikasi saat pengamatan, bukan prakiraan hujan atau peringatan BMKG.")
 
 @st.cache_resource(show_spinner="Memuat model hasil eksperimen 2024...")
 def loaded_checkpoint(name):
@@ -77,9 +81,41 @@ def run_panel():
     row[2].metric("RainNet area in evaluated pixels",str(stats["predicted_fraction_pct"])+"%")
     row[3].metric("JMA HRP area in evaluated pixels",str(stats["jma_fraction_pct"])+"%")
     a,b,c=st.columns(3)
-    a.image(result["b13"],caption="Source B13: JMA Himawari IR",use_column_width=True)
-    b.image(result["hrp"],caption="JMA HRP visual product (magenta)",use_column_width=True)
-    c.image(result["overlay"],caption="RainNet (cyan) + overlap JMA (white)",use_column_width=True)
+    a.image(result["b13"],caption="Sumber B13 — Himawari inframerah",use_container_width=True)
+    b.image(result["hrp"],caption="Referensi HRP JMA — magenta",use_container_width=True)
+    c.image(result["overlay"],caption="RainNet kuning · Tumpang tindih putih",use_container_width=True)
+
+    st.subheader("Indikasi Potensi Hujan Berdasarkan Provinsi")
+    st.caption("Indikasi awan konvektif pada waktu observasi JMA — BUKAN prediksi hujan pada jam/hari berikutnya.")
+    provinces=result.get("province_summary",[])
+    province_image=result.get("province_overlay")
+    if provinces and province_image is not None:
+        indicated=[p for p in provinces if p["indikasi"]!="Belum terindikasi"]
+        st.write("**"+str(len(indicated))+" dari 38 provinsi** memiliki area terindikasi; "
+                 "label di peta menampilkan maksimum 12 provinsi dengan cakupan relatif tertinggi.")
+        st.image(province_image,
+                 caption="Peta Provinsi Indonesia · Kuning: model · Putih: kesepakatan dengan HRP JMA",
+                 use_container_width=True)
+        st.caption("Sebaran lokal: ≥0,5%, sebaran luas: ≥3%, sangat luas: ≥10% piksel provinsi. "
+                   "Klasifikasi ini hanya menggambarkan sebaran piksel, bukan intensitas atau peluang hujan.")
+        region_rows=[{
+            "Provinsi":p["provinsi"],
+            "Status sebaran":p["indikasi"],
+            "RainNet (%)":p["luas_indikasi_rainnet_pct"],
+            "JMA HRP (%)":p["area_hrp_jma_pct"],
+            "Piksel model":p["piksel_rainnet"],
+        } for p in provinces]
+        st.dataframe(region_rows,hide_index=True,use_container_width=True)
+        buffer=io.StringIO()
+        writer=csv.DictWriter(buffer,fieldnames=list(region_rows[0]))
+        writer.writeheader()
+        writer.writerows(region_rows)
+        st.download_button("Unduh Rekap 38 Provinsi (CSV)",buffer.getvalue().encode("utf-8-sig"),
+                           file_name="RainNet_indikasi_38_provinsi.csv",mime="text/csv")
+    else:
+        st.warning("Label provinsi tidak tersedia: citra harus sesuai georeferensi JMA r2w 1501×901.")
+    st.info("Validitas geografis: batas provinsi 38 wilayah diproyeksikan ke grid JMA 0,05°. "
+            "Hasilnya adalah indikasi spasial dari citra, bukan estimasi mm/jam atau peringatan dini resmi.")
     with st.expander("Proses multi-agent, waktu observasi, dan audit ilmiah",expanded=True):
         for a in result["record"]["agents"]:
             st.write("**"+a["agent"]+":** "+a["result"])
