@@ -22,16 +22,16 @@ st.set_page_config(page_title="RainNet V1 | Himawari Live Comparison",
 st.markdown("""
 <style>
 .block-container{max-width:1500px;padding-top:1.6rem}
-div[data-testid="stMetric"]{border:1px solid #e1bf45;border-radius:14px;padding:12px}
-div.stButton > button[kind="primary"]{background:#facc15!important;border:1px solid #ca8a04!important;color:#1f2937!important;font-weight:700!important}
-div.stButton > button[kind="primary"]:hover{background:#fde047!important;border-color:#a16207!important}
+div[data-testid="stMetric"]{border:1px solid #8ba9f7;border-radius:14px;padding:12px}
+div.stButton > button[kind="primary"]{background:#1248d6!important;border:1px solid #073ba9!important;color:#ffffff!important;font-weight:700!important}
+div.stButton > button[kind="primary"]:hover{background:#1b60f3!important;border-color:#0b45bf!important}
 footer{visibility:hidden}
 </style>
 """,unsafe_allow_html=True)
 
 st.title("RainNet V1 — Himawari Live Analysis")
-st.caption("BUILD 2026-11-12 | RAINNET KUNING | 38 PROVINSI — Versi terbaru")
-st.markdown("**Legenda:** RainNet = :orange[KUNING] | HRP JMA = MAGENTA | Irisan = PUTIH")
+st.caption("BUILD 2026-11-12 | RAINNET BIRU PEKAT | 38 PROVINSI — Versi terbaru")
+st.markdown("**Legenda:** RainNet = :blue[BIRU PEKAT] | HRP JMA = MAGENTA | Area cocok = BIRU TERANG")
 st.caption("Research-grade CNN segmentation of deep convective clouds | Dissertation 2024 | JMA reference")
 st.warning("This is a scientific visualization of potential heavy-rainfall areas, NOT a rainfall amount measurement, flood warning, or validated weather forecast.")
 
@@ -47,7 +47,7 @@ with st.sidebar:
     st.markdown("[JMA Users' Guide](https://www.data.jma.go.jp/mscweb/data/himawari/Users_Guide.pdf)")
     st.markdown("[Data batas 38 provinsi · CC BY 4.0](https://github.com/denyherianto/indonesia-geojson-topojson-maps-with-38-provinces)")
     st.divider()
-    st.info("Kuning = segmentasi model terpilih, magenta = indikator HRP JMA, putih = area tumpang tindih. "
+    st.info("Biru pekat = RainNet; biru lebih terang = area yang juga ditandai HRP JMA; magenta = warna produk JMA. "
             "Label provinsi menyatakan cakupan piksel terindikasi saat pengamatan, bukan prakiraan hujan atau peringatan BMKG.")
 
 @st.cache_resource(show_spinner="Memuat model hasil eksperimen 2024...")
@@ -87,7 +87,7 @@ def run_panel():
     a,b,c=st.columns(3)
     a.image(result["b13"],caption="Sumber B13 — Himawari inframerah",use_container_width=True)
     b.image(result["hrp"],caption="Referensi HRP JMA — magenta",use_container_width=True)
-    c.image(result["overlay"],caption="RainNet kuning · Tumpang tindih putih",use_container_width=True)
+    c.image(result["overlay"],caption="RainNet biru pekat · Kesesuaian dengan JMA biru terang",use_container_width=True)
 
     st.subheader("Indikasi Potensi Hujan Berdasarkan Provinsi")
     st.caption("Indikasi awan konvektif pada waktu observasi JMA — BUKAN prediksi hujan pada jam/hari berikutnya.")
@@ -98,7 +98,7 @@ def run_panel():
         st.write("**"+str(len(indicated))+" dari 38 provinsi** memiliki area terindikasi; "
                  "label di peta menampilkan maksimum 12 provinsi dengan cakupan relatif tertinggi.")
         st.image(province_image,
-                 caption="Peta Provinsi Indonesia · Kuning: model · Putih: kesepakatan dengan HRP JMA",
+                 caption="Peta Provinsi Indonesia · Biru pekat: model · Biru terang: kesesuaian dengan HRP JMA",
                  use_container_width=True)
         st.caption("Sebaran lokal: ≥0,5%, sebaran luas: ≥3%, sangat luas: ≥10% piksel provinsi. "
                    "Klasifikasi ini hanya menggambarkan sebaran piksel, bukan intensitas atau peluang hujan.")

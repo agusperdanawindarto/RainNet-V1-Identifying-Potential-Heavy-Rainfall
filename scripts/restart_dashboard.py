@@ -79,7 +79,7 @@ def main():
             r = requests.get(HEALTH, timeout=2)
             if r.ok and "ok" in r.text.lower():
                 print("RAINNET_RESTART_OK", child.pid, HEALTH, flush=True)
-                print("OPEN", f"http://127.0.0.1:{PORT}/?rainnet_build=yellow_38provinces",
+                print("OPEN", f"http://127.0.0.1:{PORT}/?rainnet_build=deepblue_38provinces",
                       flush=True)
                 return
         except requests.RequestException:

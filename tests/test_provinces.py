@@ -1,4 +1,4 @@
-"""Regression tests of 38-province spatial attribution and yellow RainNet overlay."""
+"""Regression tests of 38-province spatial attribution and deep blue RainNet overlay."""
 import unittest
 from pathlib import Path
 
@@ -60,7 +60,7 @@ class ProvinceUnitTests(unittest.TestCase):
         labelled=draw_province_labels(raw,output)
         self.assertEqual(labelled.size,GRID_SIZE)
 
-    def test_yellow_model_white_overlap(self):
+    def test_deep_blue_model_blue_agreement(self):
         base=Image.new("RGB",(400,400),(40,40,40))
         jma=base.copy()
         jma.putpixel((80,80),(255,0,255))
@@ -70,9 +70,12 @@ class ProvinceUnitTests(unittest.TestCase):
         out=visualization(base,pred,jma)
         a=out.getpixel((100,100))
         b=out.getpixel((80,80))
-        self.assertGreater(a[0],a[2]+100)  # yellow vs blue
-        self.assertGreater(a[1],a[2]+60)
-        self.assertTrue(min(b)>205)  # white overlap
+        # Both model-only and model+JMA pixels must stay distinctly BLUE.
+        self.assertGreater(a[2],a[0]+130)
+        self.assertGreater(a[2],a[1]+130)
+        self.assertGreater(b[2],b[0]+130)
+        self.assertGreater(b[2],b[1]+85)
+        self.assertGreater(b[1],a[1]+35)  # JMA agreement uses brighter blue
 
     def test_coverage_classes_descriptive_only(self):
         self.assertEqual(_classify(0.4,200),"Belum terindikasi")

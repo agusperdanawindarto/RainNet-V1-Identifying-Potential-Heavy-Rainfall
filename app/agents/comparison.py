@@ -68,10 +68,12 @@ def visualization(b13: Image.Image, probabilities: np.ndarray,
     base=np.asarray(b13.convert("RGB"),dtype=np.float32)
     mask=probabilities>=threshold
     out=base.copy()
-    # High-contrast yellow for RainNet; magenta in JMA; white is overlap.
-    # Blend preserves visible cloud structures behind the predicted region.
-    out[mask]=out[mask]*0.32+np.array([255,221,35])*0.68
+    # Strong, saturated royal blue for ALL RainNet-positive pixels.
+    # Previously the white "overlap" overlay hid most of the model's
+    # predictions, because RainNet and JMA usually agree on most pixels.
+    # Keep agreement BLUE (lighter royal blue), never replace it with white.
+    out[mask]=out[mask]*0.08+np.array([4,58,245])*0.92
     ref=jma_magenta_mask(reference)
     both=mask&ref
-    out[both]=out[both]*0.13+np.array([255,255,255])*0.87
+    out[both]=out[both]*0.07+np.array([22,116,252])*0.93
     return Image.fromarray(np.uint8(np.clip(out,0,255)),"RGB")

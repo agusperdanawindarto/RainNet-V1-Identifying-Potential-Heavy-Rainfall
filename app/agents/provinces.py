@@ -183,13 +183,13 @@ def draw_province_labels(overlay: Image.Image, summary: list,
             continue
         occupied.append(placed)
         pencil.rounded_rectangle(placed, radius=7, fill=(9, 19, 31, 225),
-                                outline=(255, 210, 28, 255), width=2)
+                                outline=(58, 152, 255, 255), width=2)
         pencil.text((placed[0] + 9, placed[1] + 5), text,
-                    font=font, fill=(255, 244, 206, 255))
+                    font=font, fill=(237, 247, 255, 255))
         pencil.line((px, py, min(max(px, placed[0]), placed[2]),
                      min(max(py, placed[1]), placed[3])),
-                    fill=(255, 212, 40, 230), width=2)
+                    fill=(58, 152, 255, 230), width=2)
         pencil.ellipse((px-4, py-4, px+4, py+4),
-                       fill=(255, 224, 33, 255), outline=(0, 0, 0, 255), width=1)
+                       fill=(3, 78, 250, 255), outline=(0, 0, 0, 255), width=1)
         labels += 1
     return Image.alpha_composite(result, layer).convert("RGB")

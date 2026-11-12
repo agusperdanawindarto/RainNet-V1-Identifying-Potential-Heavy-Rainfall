@@ -6,7 +6,7 @@ Research project associated with the 2024 doctoral dissertation of Agus Perdana 
 
 ## What this repository provides
 
-A **VS Code / Streamlit multi-agent desktop-local research dashboard** that retrieves synchronized Himawari **B13 Infrared** and **Heavy Rainfall Potential (HRP)** images from Japan Meteorological Agency (JMA) and applies the original trained **RainNet** model. The system compares its segmentation visually with JMA's HRP product, produces an annotated yellow RainNet overlay, and reports indicative cloud coverage for **38 Indonesian provinces** with geographic labels, exportable CSV, and a saved JSON audit report.
+A **VS Code / Streamlit multi-agent desktop-local research dashboard** that retrieves synchronized Himawari **B13 Infrared** and **Heavy Rainfall Potential (HRP)** images from Japan Meteorological Agency (JMA) and applies the original trained **RainNet** model. The system compares its segmentation visually with JMA's HRP product, produces an annotated deep blue RainNet overlay, and reports indicative cloud coverage for **38 Indonesian provinces** with geographic labels, exportable CSV, and a saved JSON audit report.
 
 **Not a rainfall gauge or an operational warning system.** HRP indicates possible or probable rainfall associated with deep convective clouds, not measured rainfall in millimeters. Derived-mask similarity is exploratory agreement with JMA imagery, not independent ground-truth validation or a forecast of future rainfall.
 
@@ -38,8 +38,8 @@ python -m streamlit run app/dashboard.py --server.port 8501
 Or double-click `run_rainnet.cmd`. The local dashboard opens at **http://localhost:8501**. Use VS Code Run and Debug with the provided `.vscode/launch.json`.
 
 **Important — always load the latest GUI:** Choose **RainNet V1 - Restart Latest GUI (recommended)** in VS Code Run and Debug, or use `run_rainnet.cmd`. The safe restart script checks that port 8501 belongs to this exact RainNet Streamlit process before terminating it and opening the new version. This avoids stale code from an older Streamlit server. Then open
-`http://127.0.0.1:8501/?rainnet_build=yellow_38provinces`
-(or Ctrl+Shift+R in the existing browser tab). Confirm the version banner **RAINNET KUNING | 38 PROVINSI** is visible. The dashboard uses a **yellow-gold visual theme** and province labels.
+`http://127.0.0.1:8501/?rainnet_build=deepblue_38provinces`
+(or Ctrl+Shift+R in the existing browser tab). Confirm the version banner **RAINNET BIRU PEKAT | 38 PROVINSI** is visible. The dashboard uses a **deep-blue visual theme** and province labels.
 
 The repository does **not** bundle the trained model or the original 68 GB dissertation materials. Place the following original files in `models/selected/` on your own computer:
 - `rainnet_binary_best_05.h5` (RainNet with dropout 0.5; default)
@@ -56,10 +56,10 @@ Model loading is version-dependent: the tested environment was TensorFlow 2.13.0
 
 `scripts/select_and_hash_models.py` can copy and verify the selected weights **from the original dissertation folder**, if you have that folder. `scripts/consolidate_legacy_experiments.py` performs a copy-and-verify archive; it does not delete originals.
 
-### 38 Indonesian provinces and yellow RainNet overlay
+### 38 Indonesian provinces and deep-blue RainNet overlay
 
-RainNet's segmented pixels are displayed in **yellow**, JMA HRP annotations
-remain **magenta**, and overlapping areas are **white**. See the labeled
+RainNet's segmented pixels are displayed in **deep blue**, JMA HRP annotations
+remain **magenta**, and overlapping areas are **brighter blue**. See the labeled
 full-width province image, sortable table of all 38 provinces, and CSV export
 in the dashboard. Values are the **proportion of rasterized province pixels
 classified as potential convective clouds at the image observation time**,
@@ -71,7 +71,7 @@ are attributed to [38-province GeoJSON](https://github.com/denyherianto/indonesi
 published under CC BY 4.0 (attribution in [the methods document](docs/PROVINCE_ATTRIBUTION.md)).
 This research overlay is approximate and not an official meteorological warning.
 
-The yellow-image and province-label changes also remove obsolete Streamlit
+The deep-blue image and province-label changes also remove obsolete Streamlit
 `use_column_width` rendering parameters and instead use
 `use_container_width=True`.
 
